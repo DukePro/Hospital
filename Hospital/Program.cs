@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using static System.Console;
 
 namespace Hospital
 {
@@ -29,14 +30,14 @@ namespace Hospital
 
             while (isExit == false)
             {
-                Console.WriteLine();
-                Console.WriteLine(ShowAllCommand + " - Показать всех");
-                Console.WriteLine(NameSortCommand + " - Сортировка по ФИО");
-                Console.WriteLine(AgeSortCommand + " - Сортировка по возрасту");
-                Console.WriteLine(DeseeseShowCommand + " - Отобразить пациентов по болезни");
-                Console.WriteLine(Exit + " - Выход\n");
+                WriteLine();
+                WriteLine(ShowAllCommand + " - Показать всех");
+                WriteLine(NameSortCommand + " - Сортировка по ФИО");
+                WriteLine(AgeSortCommand + " - Сортировка по возрасту");
+                WriteLine(DeseeseShowCommand + " - Отобразить пациентов по болезни");
+                WriteLine(Exit + " - Выход\n");
 
-                userInput = Console.ReadLine();
+                userInput = ReadLine();
 
                 switch (userInput)
                 {
@@ -140,7 +141,9 @@ namespace Hospital
         "Тиктокерство",
         "ФГМ",
         "ПГМ",
-        "ЧСВ"
+        "ЧСВ",
+        "Вконтактофилия",
+        "Твиттерастия"
             };
 
             string desesse = deseesses[Utils.GetRandomNumber(deseesses.Length - 1)];
@@ -165,50 +168,50 @@ namespace Hospital
         {
             foreach (var patient in _patients)
             {
-                Console.WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
+                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
             }
         }
 
         public void SortByName()
         {
-            Console.WriteLine("Пациенты отсортированные по ФИО");
+            WriteLine("Пациенты отсортированные по ФИО");
 
             var patientsByName = _patients.OrderBy(patient => patient.Name).ToList();
 
             foreach (var patient in patientsByName)
             {
-                Console.WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
+                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
             }
         }
 
         public void SortByAge()
         {
-            Console.WriteLine("Пациенты отсортированные по возрасту");
+            WriteLine("Пациенты отсортированные по возрасту");
 
             var patientsByAge = _patients.OrderBy(patient =>patient.Age).ToList();
 
             foreach (var criminal in patientsByAge)
             {
-                Console.WriteLine($"{criminal.Name}, Рост {criminal.Age}, {criminal.Deseese}");
+                WriteLine($"{criminal.Name}, Рост {criminal.Age}, {criminal.Deseese}");
             }
         }
 
         public void ShowByDesesse()
         {
-            Console.WriteLine("Введите название болезни:");
+            WriteLine("Введите название болезни:");
 
-            string deseesse = Console.ReadLine();
+            string deseesse = ReadLine();
 
             var patients = from Patient patient in _patients where patient.Deseese.ToLower() == deseesse.ToLower() select patient;
 
             if (patients.Count() == 0)
             {
-                Console.WriteLine("Ничего не найдено");
+                WriteLine("Ничего не найдено");
             }
 
             foreach (var patient in patients)
             {
-                Console.WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
+                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
             }
         }
 
@@ -218,18 +221,6 @@ namespace Hospital
             {
                 _patients.Add(new Patient());
             }
-        }
-
-        private int UserInput()
-        {
-            int input;
-
-            if (!int.TryParse(Console.ReadLine(), out input))
-            {
-                Console.WriteLine("Некорректные данные");
-            }
-
-            return input;
         }
     }
 
