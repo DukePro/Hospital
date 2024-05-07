@@ -26,8 +26,8 @@ namespace Hospital
             string userInput;
             bool isExit = false;
 
-            Database dataBase = new Database();
-            dataBase.CreatePatients();
+            Database database = new Database();
+            database.CreatePatients();
 
             while (isExit == false)
             {
@@ -43,19 +43,19 @@ namespace Hospital
                 switch (userInput)
                 {
                     case ShowAllCommand:
-                        dataBase.ShowPatients();
+                        database.ShowPatients();
                         break;
 
                     case NameSortCommand:
-                        dataBase.SortByName();
+                        database.SortByName();
                         break;
 
                     case AgeSortCommand:
-                        dataBase.SortByAge();
+                        database.SortByAge();
                         break;
 
                     case DeseeseShowCommand:
-                        dataBase.ShowByDesesse();
+                        database.ShowByDesesse();
                         break;
 
                     case Exit:
