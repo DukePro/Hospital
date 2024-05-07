@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using static System.Console;
 
 namespace Hospital
@@ -25,7 +26,7 @@ namespace Hospital
             string userInput;
             bool isExit = false;
 
-            DataBase dataBase = new DataBase();
+            Database dataBase = new Database();
             dataBase.CreatePatients();
 
             while (isExit == false)
@@ -42,7 +43,7 @@ namespace Hospital
                 switch (userInput)
                 {
                     case ShowAllCommand:
-                        dataBase.ShowAllPatients();
+                        dataBase.ShowPatients();
                         break;
 
                     case NameSortCommand:
@@ -80,8 +81,8 @@ namespace Hospital
 
         private string GetName()
         {
-            string[] criminalNames = new string[]
-            {
+            string[] criminalNames =
+            [
         "Толя Руль",
         "Вася Шнырь",
         "Петруха Кабан",
@@ -116,7 +117,7 @@ namespace Hospital
         "Паша Кабриолет",
         "Коля Чмырь",
         "Миша Мафиозник"
-            };
+            ];
 
             string name = criminalNames[Utils.GetRandomNumber(criminalNames.Length - 1)];
             return name;
@@ -124,8 +125,8 @@ namespace Hospital
 
         private string GetDesesse()
         {
-            string[] deseesses = new string[]
-            {
+            string[] deseesses =
+            [
         "Грипп",
         "Заноза",
         "Красноглазие",
@@ -144,7 +145,7 @@ namespace Hospital
         "ЧСВ",
         "Вконтактофилия",
         "Твиттерастия"
-            };
+            ];
 
             string desesse = deseesses[Utils.GetRandomNumber(deseesses.Length - 1)];
             return desesse;
@@ -159,14 +160,19 @@ namespace Hospital
         }
     }
 
-    class DataBase
+    class Database
     {
         private int ammountOfRecords = 20;
         private List<Patient> _patients = new List<Patient>();
 
-        public void ShowAllPatients()
+        public void ShowPatients(List<Patient>? patients = null)
         {
-            foreach (var patient in _patients)
+            if (patients == null)
+            {
+                patients = _patients;
+            }
+
+            foreach (var patient in patients)
             {
                 WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
             }
@@ -178,10 +184,7 @@ namespace Hospital
 
             var patientsByName = _patients.OrderBy(patient => patient.Name).ToList();
 
-            foreach (var patient in patientsByName)
-            {
-                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
-            }
+            ShowPatients(patientsByName);
         }
 
         public void SortByAge()
@@ -190,10 +193,7 @@ namespace Hospital
 
             var patientsByAge = _patients.OrderBy(patient =>patient.Age).ToList();
 
-            foreach (var criminal in patientsByAge)
-            {
-                WriteLine($"{criminal.Name}, Рост {criminal.Age}, {criminal.Deseese}");
-            }
+            ShowPatients(patientsByAge);
         }
 
         public void ShowByDesesse()
@@ -201,8 +201,7 @@ namespace Hospital
             WriteLine("Введите название болезни:");
 
             string deseesse = ReadLine();
-
-            var patients = from Patient patient in _patients where patient.Deseese.ToLower() == deseesse.ToLower() select patient;
+            var patients = _patients.Where(patient => patient.Deseese.ToLower() == deseesse.ToLower()).ToList();
 
             if (patients.Count() == 0)
             {
@@ -213,6 +212,8 @@ namespace Hospital
             {
                 WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
             }
+
+            ShowPatients(patients);
         }
 
         public void CreatePatients()
