@@ -162,7 +162,7 @@ namespace Hospital
 
     class Database
     {
-        private int ammountOfRecords = 20;
+        private int _ammountOfRecords = 20;
         private List<Patient> _patients = new List<Patient>();
 
         public void ShowPatients(List<Patient>? patients = null)
@@ -208,17 +208,12 @@ namespace Hospital
                 WriteLine("Ничего не найдено");
             }
 
-            foreach (var patient in patients)
-            {
-                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
-            }
-
             ShowPatients(patients);
         }
 
         public void CreatePatients()
         {
-            for (int i = 0; i < ammountOfRecords; i++)
+            for (int i = 0; i < _ammountOfRecords; i++)
             {
                 _patients.Add(new Patient());
             }
@@ -248,3 +243,6 @@ namespace Hospital
 //2)Отсортировать всех больных по возрасту
 //3)Вывести больных с определенным заболеванием
 //(название заболевания вводится пользователем с клавиатуры) 
+
+
+//3) Пациент не должен знать про список с разными именами - это ответственность класса, который создает пациентов. - см. GetName() и GetDesesse()
