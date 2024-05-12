@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using static System.Console;
+﻿using static System.Console;
 
 namespace Hospital
 {
@@ -68,16 +66,76 @@ namespace Hospital
 
     class Patient
     {
-        public Patient()
+        public Patient(string name, string deseese, int age)
         {
-            Name = GetName();
-            Deseese = GetDesesse();
-            Age = GetAge();
+            Name = name;
+            Deseese = deseese;
+            Age = age;
         }
 
         public string Name { get; private set; }
         public string Deseese { get; private set; }
         public int Age { get; private set; }
+    }
+
+    class Database
+    {
+        private int _ammountOfRecords = 20;
+        private List<Patient> _patients = new List<Patient>();
+
+        public void ShowPatients(List<Patient>? patients = null)
+        {
+            if (patients == null)
+            {
+                patients = _patients;
+            }
+
+            foreach (var patient in patients)
+            {
+                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
+            }
+        }
+
+        public void SortByName()
+        {
+            WriteLine("Пациенты отсортированные по ФИО");
+
+            var patientsByName = _patients.OrderBy(patient => patient.Name).ToList();
+
+            ShowPatients(patientsByName);
+        }
+
+        public void SortByAge()
+        {
+            WriteLine("Пациенты отсортированные по возрасту");
+
+            var patientsByAge = _patients.OrderBy(patient =>patient.Age).ToList();
+
+            ShowPatients(patientsByAge);
+        }
+
+        public void ShowByDesesse()
+        {
+            WriteLine("Введите название болезни:");
+
+            string deseesse = ReadLine();
+            var patients = _patients.Where(patient => patient.Deseese.ToLower() == deseesse.ToLower()).ToList();
+
+            if (patients.Count() == 0)
+            {
+                WriteLine("Ничего не найдено");
+            }
+
+            ShowPatients(patients);
+        }
+
+        public void CreatePatients()
+        {
+            for (int i = 0; i < _ammountOfRecords; i++)
+            {
+                _patients.Add(new Patient(GetName(), GetDesesse(), GetAge()));
+            }
+        }
 
         private string GetName()
         {
@@ -160,66 +218,6 @@ namespace Hospital
         }
     }
 
-    class Database
-    {
-        private int _ammountOfRecords = 20;
-        private List<Patient> _patients = new List<Patient>();
-
-        public void ShowPatients(List<Patient>? patients = null)
-        {
-            if (patients == null)
-            {
-                patients = _patients;
-            }
-
-            foreach (var patient in patients)
-            {
-                WriteLine($"{patient.Name}, Рост {patient.Age}, {patient.Deseese}");
-            }
-        }
-
-        public void SortByName()
-        {
-            WriteLine("Пациенты отсортированные по ФИО");
-
-            var patientsByName = _patients.OrderBy(patient => patient.Name).ToList();
-
-            ShowPatients(patientsByName);
-        }
-
-        public void SortByAge()
-        {
-            WriteLine("Пациенты отсортированные по возрасту");
-
-            var patientsByAge = _patients.OrderBy(patient =>patient.Age).ToList();
-
-            ShowPatients(patientsByAge);
-        }
-
-        public void ShowByDesesse()
-        {
-            WriteLine("Введите название болезни:");
-
-            string deseesse = ReadLine();
-            var patients = _patients.Where(patient => patient.Deseese.ToLower() == deseesse.ToLower()).ToList();
-
-            if (patients.Count() == 0)
-            {
-                WriteLine("Ничего не найдено");
-            }
-
-            ShowPatients(patients);
-        }
-
-        public void CreatePatients()
-        {
-            for (int i = 0; i < _ammountOfRecords; i++)
-            {
-                _patients.Add(new Patient());
-            }
-        }
-    }
-
     class Utils
     {
         private static Random s_random = new Random();
@@ -243,6 +241,3 @@ namespace Hospital
 //2)Отсортировать всех больных по возрасту
 //3)Вывести больных с определенным заболеванием
 //(название заболевания вводится пользователем с клавиатуры) 
-
-
-//3) Пациент не должен знать про список с разными именами - это ответственность класса, который создает пациентов. - см. GetName() и GetDesesse()
